@@ -24,3 +24,33 @@ dnf5 install -y tmux touchegg xdotools
 rpm-ostree override install touchegg xdotool vim
 
 systemctl enable podman.socket
+
+echo "[doom] layering runtime deps"
+rpm-ostree install \
+  emacs-gtk+x11 \
+  emacs \
+  libgccjit \
+  git-core \
+  ripgrep \
+  fd-find \
+  gcc \
+  gnutls \
+  make \
+  unzip
+
+echo "[doom] staging files & units"
+install -d -m 0755 /usr/libexec/doom
+install -d -m 0755 /usr/share/doom-seed
+
+# drop our scripts into the image
+install -m 0755 /ctx/doom/doom-build-script.sh   /usr/libexec/doom/doom-build-script.sh
+install -m 0755 /ctx/doom/doom-firstboot.sh      /usr/libexec/doom/doom-firstboot.sh
+install -m 0644 /ctx/doom/doom-firstboot.service /etc/systemd/system/doom-firstboot.service
+
+echo "[doom] build-time precompile + seed archive"
+/usr/libexec/doom/doom-build-script.sh
+
+echo "[doom] enabling first-boot hydrator"
+systemctl enable doom-firstboot.service || true
+
+echo "[doom] done"
