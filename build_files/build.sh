@@ -21,8 +21,14 @@ dnf5 install -y tmux touchegg xdotools
 
 #### Example for enabling a System Unit File
 #
-rpm-ostree override install touchegg xdotool vim
+echo "[rpm-ostree] installs"
+rpm-ostree override install \
+    touchegg \
+    xdotool \
+    vim \
+    micro
 
+echo "[podman] enabling service"
 systemctl enable podman.socket
 
 echo "[doom] layering runtime deps"
