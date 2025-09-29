@@ -2,12 +2,12 @@
 Description=Hydrate Doom Emacs cache for first user and finalize
 After=network-online.target
 Wants=network-online.target
-ConditionPathExists=/usr/share/doom-seed/doom-template.tar.zst
+ConditionPathExists=/usr/share/doom-seed.zst
 ConditionPathExists=!/var/lib/doom-firstboot.done
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/doom-firstboot.sh
+ExecStart=/usr/libexec/doom/doom-firstboot.sh
 RemainAfterExit=yes
 
 [Install]

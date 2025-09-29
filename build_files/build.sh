@@ -10,7 +10,8 @@ set -ouex pipefail
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
 # this installs a package from fedora repos
-dnf5 install -y tmux touchegg xdotools
+dnf5 install -y touchegg
+# xdotools ## no match
 
 # Use a COPR Example:
 #
@@ -22,11 +23,12 @@ dnf5 install -y tmux touchegg xdotools
 #### Example for enabling a System Unit File
 #
 echo "[rpm-ostree] installs"
-rpm-ostree override install \
-    touchegg \
+rpm-ostree install \
     xdotool \
     vim \
-    micro
+    micro \
+    mkcert \
+    kitty
 
 echo "[podman] enabling service"
 systemctl enable podman.socket
@@ -44,19 +46,3 @@ rpm-ostree install \
   make \
   unzip
 
-echo "[doom] staging files & units"
-install -d -m 0755 /usr/libexec/doom
-install -d -m 0755 /usr/share/doom-seed
-
-# drop our scripts into the image
-install -m 0755 /ctx/doom/doom-build-script.sh   /usr/libexec/doom/doom-build-script.sh
-install -m 0755 /ctx/doom/doom-firstboot.sh      /usr/libexec/doom/doom-firstboot.sh
-install -m 0644 /ctx/doom/doom-firstboot.service /etc/systemd/system/doom-firstboot.service
-
-echo "[doom] build-time precompile + seed archive"
-/usr/libexec/doom/doom-build-script.sh
-
-echo "[doom] enabling first-boot hydrator"
-systemctl enable doom-firstboot.service || true
-
-echo "[doom] done"

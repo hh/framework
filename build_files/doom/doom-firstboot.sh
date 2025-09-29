@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-SEED="/usr/share/doom-seed/doom-template.tar.zst"
+SEED="/usr/share/doom-seed.zst"
 [ -f "$SEED" ] || exit 0
 LOCK="/var/lib/doom-firstboot.done"
 [ -e "$LOCK" ] && exit 0
